@@ -1,0 +1,55 @@
+
+@echo off
+title LAN Configuration and Connectivity Test
+
+echo ========================================
+echo     LAN CONFIGURATION EXPERIMENT
+echo ========================================
+echo.
+
+set /p PC=Enter computer number (1, 2, or 3):
+
+if "%PC%"=="1" set IP=192.168.1.1
+if "%PC%"=="2" set IP=192.168.1.2
+if "%PC%"=="3" set IP=192.168.1.3
+
+if not defined IP (
+    echo Invalid computer number!
+    pause
+    exit /b
+)
+
+set MASK=255.255.255.0
+
+echo.
+echo Configuring IP address: %IP%
+netsh interface ipv4 set address name="Ethernet" static %IP% %MASK%
+
+echo.
+echo -------- IP CONFIGURATION --------
+ipconfig
+
+echo.
+echo -------- CONNECTIVITY TEST --------
+
+if "%PC%"=="1" (
+    ping 192.168.1.2
+    ping 192.168.1.3
+)
+
+if "%PC%"=="2" (
+    ping 192.168.1.1
+    ping 192.168.1.3
+)
+
+if "%PC%"=="3" (
+    ping 192.168.1.1
+    ping 192.168.1.2
+)
+
+echo.
+echo -------- EXPERIMENT RESULT --------
+echo LAN configuration and ping tests completed.
+echo Check the ping output for successful replies.
+echo ========================================
+pause
